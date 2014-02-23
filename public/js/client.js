@@ -33,11 +33,19 @@
       case 'score':
         updateScore(data);
       break;
+
+      case 'gameover':
+        gameOver();
+      break;
     }
   };
 
   function updateScore(message) {
     $('#score').html(message.value);
+  }
+
+  function gameOver(message) {
+    $('#status').html('Game Over <a href="/board">New game</a>');
   }
 
   function drawBoard(board) {

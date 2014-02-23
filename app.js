@@ -85,6 +85,10 @@ webSocketServer.on('connection', function(ws) {
     ws.send(JSON.stringify({ type: 'score', value: score }));
   });
 
+  board.on('gameover', function(score) {
+    ws.send(JSON.stringify({ type: 'gameover' }));
+  });
+
   boardUpdateId = setInterval(function() {
     if (!board.running) {
       // TODO: Restart
