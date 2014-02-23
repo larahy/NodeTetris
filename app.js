@@ -72,11 +72,6 @@ webSocketServer.on('connection', function(ws) {
 
   sendBoard(ws, board);
 
-  setInterval(function() {
-    if (!board.running) return;
-    board.moveDown = true;
-  }, 265);
-
   board.on('shape', function() {
     sendBoard(ws, board);
   });
@@ -90,19 +85,11 @@ webSocketServer.on('connection', function(ws) {
   });
 
   boardUpdateId = setInterval(function() {
-    if (!board.running) {
-      // TODO: Restart
-      // board = new Board(width, height);
-      return;
-    }
+    if (!board.running) return;
 
-    if (board.moveDown) {
-      board.currentShape.moveDown();
-      board.moveDown = false;
-    }
-
+    board.currentShape.moveDown();
     sendShape(ws, board.currentShape);
-  }, speed); // TODO: Faster
+  }, speed);
 
   ws.on('close', function() {
     clearInterval(boardUpdateId);
