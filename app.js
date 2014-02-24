@@ -39,9 +39,9 @@ function sendBoard(ws, board) {
   }));
 }
 
-function sendShape(ws, shape) {
+function sendShape(ws, shape, messageType) {
   ws.send(JSON.stringify({
-    type: 'shape',
+    type: messageType,
     colour: shape.colour,
     x: shape.x,
     y: shape.y,
@@ -61,7 +61,7 @@ function handleMove(ws, board, move) {
     shape.rotate();
   }
 
-  sendShape(ws, board.currentShape);
+  sendShape(ws, board.currentShape, 'shape');
 }
 
 webSocketServer.on('connection', function(ws) {
@@ -84,11 +84,17 @@ webSocketServer.on('connection', function(ws) {
     ws.send(JSON.stringify({ type: 'gameover' }));
   });
 
+  board.on('nextshape', function(shape) {
+    sendShape(ws, shape, 'nextshape');
+  });
+
+  sendShape(ws, board.nextShape, 'nextshape');
+
   boardUpdateId = setInterval(function() {
     if (!board.running) return;
 
     board.currentShape.moveDown();
-    sendShape(ws, board.currentShape);
+    sendShape(ws, board.currentShape, 'shape');
   }, speed);
 
   ws.on('close', function() {

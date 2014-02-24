@@ -1,5 +1,10 @@
-#board svg {
+#nextshape svg, #board svg {
   background-color: #000;
+  float: left;
+}
+
+#nextshape svg {
+  margin-left: 28px;
 }
 
 #status {

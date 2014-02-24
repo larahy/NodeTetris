@@ -1,10 +1,12 @@
 (function() {
-  var svg = d3.select('#board')
+  var shapeSize = 20;
+  var svgBoard = d3.select('#board')
             .append('svg')
             .attr('width', 400)
             .attr('height', 600);
 
-  var shapeSize = 20;
+  var svgNext = d3.select('#nextshape')
+            .append('svg');
 
   var keys = {
     d: 68,
@@ -15,6 +17,19 @@
     space: 32
   };
 
+  function nextShapeX(name) {
+    switch (name) {
+      case 'O':
+        return 0.5;
+
+      case 'I':
+        return 0.5;
+
+      default:
+        return 1;
+    }
+  }
+
   var host = window.document.location.host.replace(/:.*/, '');
   var ws = new WebSocket('ws://' + host + ':3000');
 
@@ -23,7 +38,7 @@
 
     switch (data.type) {
       case 'shape':
-        drawShape(data);
+        drawShape(svgBoard, data);
       break;
 
       case 'board':
@@ -37,6 +52,12 @@
       case 'gameover':
         gameOver();
       break;
+
+      case 'nextshape':
+        data.x = nextShapeX(data.name);
+        data.y = data.data.length === 3 ? 1 : 0;
+        drawShape(svgNext, data);
+      break;
     }
   };
 
@@ -49,16 +70,20 @@
   }
 
   function drawBoard(board) {
-    shapeSize = svg.attr('width') / board.width;
-    svg.selectAll('rect').remove();
+    shapeSize = svgBoard.attr('width') / board.width;
+    svgBoard.selectAll('rect').remove();
     var colour;
+
+    svgNext
+      .attr('width', shapeSize * 5)
+      .attr('height', shapeSize * 4);
 
     for (var y = 0; y < board.height; y++) {
       for (var x = 0; x < board.width; x++) {
         colour = board.data[y][x];
 
         if (colour !== 0) {
-          svg.append('rect')
+          svgBoard.append('rect')
             .attr('x', function(d, i) {
               return x * shapeSize;
             })
@@ -75,7 +100,7 @@
     }
   }
 
-  function drawShape(shape) {
+  function drawShape(svg, shape) {
     svg.selectAll('rect.shape').remove();
     var line;
 

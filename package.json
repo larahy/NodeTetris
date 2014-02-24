@@ -11,7 +11,7 @@
   "dependencies": {
     "express": "^3.4.8",
     "ws": "^0.4.31",
-    "sirtet": "0.0.2",
+    "sirtet": "0.0.4",
     "ejs": "^0.8.5"
   },
   "devDependencies": {
