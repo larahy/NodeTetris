@@ -6,7 +6,9 @@ var MemoryStore = express.session.MemoryStore;
 var middleware = require('./middleware');
 var routes = require('./routes');
 var server = app.listen(process.env.PORT || 3000);
-var speed = 230;
+var Scores = require('./scores');
+var scores = new Scores();
+var speed = 210;
 var store = new MemoryStore();
 var WebSocketServer = require('ws').Server;
 var webSocketServer;
@@ -23,6 +25,9 @@ app.use(express.static(__dirname + '/public'));
 app.get('/session/new', routes.session.new);
 app.post('/session', routes.session.create);
 app.del('/session', routes.session.delete);
+
+// Scores
+app.get('/scores', routes.scores.index);
 
 // Game
 app.get('/', middleware.requiresUser, routes.board.index);
@@ -57,6 +62,8 @@ function handleMove(ws, board, move) {
     shape.moveRight();
   } else if (move === 'left') {
     shape.moveLeft();
+  } else if (move === 'down') {
+    shape.moveDown();
   } else if (move === 'rotate' && board.checkRotation()) {
     shape.rotate();
   }
@@ -68,7 +75,6 @@ webSocketServer.on('connection', function(ws) {
   // TODO: I might move this
   var board = new Board(14, 20);
   var boardUpdateId;
-  var session;
 
   sendBoard(ws, board);
 
@@ -80,8 +86,18 @@ webSocketServer.on('connection', function(ws) {
     ws.send(JSON.stringify({ type: 'score', value: score }));
   });
 
-  board.on('gameover', function(score) {
-    ws.send(JSON.stringify({ type: 'gameover' }));
+  board.on('gameover', function() {
+    parseCookie(ws.upgradeReq, null, function(err) {
+      var sid = ws.upgradeReq.signedCookies['connect.sid'];
+
+      store.get(sid, function(err, session) {
+        if (err) console.error('Error loading session:', err);
+        scores.save({ name: session.user.name, score: board.score }, function(err) {
+          if (err) console.error('Error saving score:', err);
+          ws.send(JSON.stringify({ type: 'gameover' }));
+        });
+      });
+    });
   });
 
   board.on('nextshape', function(shape) {

@@ -11,8 +11,10 @@
   var keys = {
     d: 68,
     a: 65,
+    s: 83,
     left: 37,
     right: 39,
+    down: 40,
     p: 80,
     space: 32
   };
@@ -127,6 +129,8 @@
       message = { move: 'right' };
     } else if (key === keys.a || key === keys.left) {
       message = { move: 'left' };
+    } else if (key === keys.s || key === keys.down) {
+      message = { move: 'down' };
     } else if (key === keys.space) {
       message = { move: 'rotate' };
     } else if (key === keys.p) {
