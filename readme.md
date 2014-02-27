@@ -1,8 +1,20 @@
-### Workshop intro task
+### Makers Academy Node Workshop
 
-* Create Express-based project
-* Render a view
-* Post a form
+#### Resources
+
+Slides:
+  http://bit.ly/ma-node-slides
+
+Node and Express documentation:
+  http://nodejs.org/docs/latest/api/all.html
+  http://expressjs.com/api.html
+
+JavaScript documentation:
+  http://devdocs.io/
+  https://developer.mozilla.org/en/docs/Web/JavaScript
+
+Bootstrap:
+  http://getbootstrap.com/ 
 
 ### Tetris tasks
 
