@@ -12,5 +12,12 @@
   <div id="board"></div>
   <div id="nextshape"></div>
   <script src="/js/client.js"></script>
+  <h1>High Scores</h1>
+
+  <ul>
+  <% scores.forEach(function(score) { %>
+    <li><%= score.name %>: <%= score.score %></li>
+  <% }) %>
+</ul>
 </body>
 </html>
