@@ -118,7 +118,7 @@ webSocketServer.on('connection', function(ws) {
 
   updateSpeed = function(){
     clearInterval(boardUpdateId);
-    setInterval(gameLoop, speed - board.score * 40))
+    boardUpdateId = setInterval(gameLoop, speed - board.score * 40)
   }
 
   gameLoop = function() {
