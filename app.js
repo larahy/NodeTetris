@@ -109,18 +109,26 @@ webSocketServer.on('connection', function(ws) {
     });
   });
 
-  board.on('nextshape', function(shape) {
+  board.on('nextshape', function(shape, boardUpdateId) {
     sendShape(ws, shape, 'nextshape');
+    updateSpeed(boardUpdateId);
   });
 
   sendShape(ws, board.nextShape, 'nextshape');
 
-  boardUpdateId = setInterval(function() {
-    if (!board.running) return;
+  updateSpeed = function(){
+    clearInterval(boardUpdateId);
+    setInterval(gameLoop, speed - board.score * 40))
+  }
+
+  gameLoop = function() {
+     if (!board.running) return;
 
     board.currentShape.moveDown();
     sendShape(ws, board.currentShape, 'shape');
-  }, speed);
+  }
+
+  boardUpdateId = setInterval(gameLoop,speed);
 
   ws.on('close', function() {
     clearInterval(boardUpdateId);
