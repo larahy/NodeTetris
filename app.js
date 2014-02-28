@@ -8,7 +8,7 @@ var routes = require('./routes');
 var server = app.listen(process.env.PORT || 3000);
 var Scores = require('./scores');
 var scores = new Scores();
-var speed = 210;
+var speed = 310;
 var store = new MemoryStore();
 var WebSocketServer = require('ws').Server;
 var webSocketServer;

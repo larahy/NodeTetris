@@ -1,5 +1,14 @@
 ### Makers Academy Node Workshop
 
+To run this project, do the following:
+
+```
+npm install
+npm start
+```
+
+Then visit <http://localhost:3000> in a browser.
+
 #### Resources
 
 Slides:
@@ -27,3 +36,4 @@ Bootstrap:
 * [Client, SVG/D3] Show the "ghost" of where the current piece will fall
 * [Client, server] Allow a key to be pressed to immediately make the piece drop down
 * Your own feature: Powerups, multiplayer, etc.
+
