@@ -134,14 +134,20 @@
     } else if (key === keys.space) {
       message = { move: 'rotate' };
     } else if (key === keys.p) {
-      // TODO: Pause
+      message = { pause: 'true' };
     }
 
     if (message) {
-      message.type = 'move';
+      if (typeof message.move === 'string') {
+        message.type = 'move';
+      } else if (typeof message.pause === "string") {
+        message.type = 'pause';
+      }
+
       ws.send(JSON.stringify(message));
       return true;
     }
+
   }
 
   $(document).keydown(function(e) {

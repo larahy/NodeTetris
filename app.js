@@ -71,6 +71,15 @@ function handleMove(ws, board, move) {
   sendShape(ws, board.currentShape, 'shape');
 }
 
+function handlePause(board) {
+  if (board.running) {
+    board.running = false;
+  } else {
+    board.running = true;
+  }
+
+}
+
 webSocketServer.on('connection', function(ws) {
   // TODO: I might move this
   var board = new Board(14, 20);
@@ -122,6 +131,8 @@ webSocketServer.on('connection', function(ws) {
 
     if (message.type === 'move') {
       handleMove(ws, board, message.move);
+    } else if (message.type === 'pause') {
+      handlePause(board);
     } else {
       ws.send('Unknown command');
     }
